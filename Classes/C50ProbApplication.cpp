@@ -33,7 +33,7 @@ bool C50ProbApplication::applicationDidFinishLaunching()
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
     glView->setFrameSize(gameScreenSize.width, gameScreenSize.height);
 #endif
-    glView->setDesignResolutionSize(gameScreenSize.width, gameScreenSize.height, ResolutionPolicy::NO_BORDER);
+    glView->setDesignResolutionSize(gameScreenSize.width, gameScreenSize.height, ResolutionPolicy::EXACT_FIT);
 
     CMainScene* scene = CMainScene::create();
     scene->run();

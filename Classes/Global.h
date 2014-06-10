@@ -6,4 +6,6 @@
 extern const cocos2d::Size gameScreenSize;
 extern CocosDenshion::SimpleAudioEngine* audioEngine;
 
+long getMillionSeconds();
+
 #endif

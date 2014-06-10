@@ -181,3 +181,4 @@ proj.win32/Release.win32
 */ant.properties
 proj.android/gen
 proj.android/assets
+proj.android/libs

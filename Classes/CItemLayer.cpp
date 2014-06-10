@@ -14,6 +14,13 @@ CItemLayer::CItemLayer() :
 CItemLayer::~CItemLayer()
 {
     winLabel->release();
+
+    while(!sprites.empty())
+    {
+        CItemSprite* sprite = sprites.front();
+        sprite->release();
+        sprites.pop_front();
+    }
 }
 
 bool CItemLayer::isDropping()
@@ -69,14 +76,6 @@ bool CItemLayer::init()
     bestTimeLabel->setColor(Color3B(0, 0, 0));
     this->addChild(bestTimeLabel);
 
-    // 初始化...
-    startNewGame();
-}
-
-void CItemLayer::onEnter()
-{
-    Layer::onEnter();
-
     // 手势侦听
     auto touchListener = EventListenerTouchOneByOne::create();
     touchListener->setSwallowTouches(true);
@@ -97,6 +96,14 @@ void CItemLayer::onEnter()
     auto fadeOut = FadeOut::create(2.0f);
     auto delay = DelayTime::create(3.0f);
     hint->runAction(Sequence::create(delay, fadeOut, NULL));
+
+    // 初始化...
+    startNewGame();
+}
+
+void CItemLayer::onEnter()
+{
+    Layer::onEnter();
 }
 
 void CItemLayer::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
@@ -212,6 +219,7 @@ void CItemLayer::update(float delta)
             CItemSprite* sprite = sprites.front();
             sprites.pop_front();
             this->removeChild(sprite, true);
+            sprite->release();
 
             if(!sprites.empty())
             {
@@ -324,6 +332,8 @@ void CItemLayer::startNewGame()
     // 清除上一关卡
     while(!sprites.empty())
     {
+        CItemSprite* sprite = sprites.front();
+        sprite->release();
         sprites.pop_front();
     }
     while(!actions.empty())
@@ -334,10 +344,8 @@ void CItemLayer::startNewGame()
     // 新建 50 个方块
     for(int i = 0; i < 50; i++)
     {
-        //CItemSprite* sprite = CItemSprite::create();
-        //sprite->setAnchorPoint(Size(50, 19));
-        CItemSprite* sprite = new CItemSprite();
-        sprite->init();
+        CItemSprite* sprite = CItemSprite::create();
+        sprite->retain();
         sprites.push_back(sprite);
 
         if(i < 5)

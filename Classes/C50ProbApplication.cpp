@@ -30,7 +30,9 @@ bool C50ProbApplication::applicationDidFinishLaunching()
     //director->setDisplayStats(true);
     director->setAnimationInterval(1.0f / 60.0f);
 
-    //glView->setFrameSize(gameScreenSize.width, gameScreenSize.height);
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+    glView->setFrameSize(gameScreenSize.width, gameScreenSize.height);
+#endif
     glView->setDesignResolutionSize(gameScreenSize.width, gameScreenSize.height, ResolutionPolicy::NO_BORDER);
 
     CMainScene* scene = CMainScene::create();
@@ -41,8 +43,10 @@ bool C50ProbApplication::applicationDidFinishLaunching()
 
 void C50ProbApplication::applicationDidEnterBackground()
 {
+    Director::getInstance()->stopAnimation();
 }
 
 void C50ProbApplication::applicationWillEnterForeground()
 {
+    Director::getInstance()->startAnimation();
 }

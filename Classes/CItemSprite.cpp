@@ -13,12 +13,13 @@ Point CItemSprite::coor[9] = {
     Point(480.0 / 2.0f, 640.0 - 217.0f),
 
     Point(-100, 640.0 - 217.0f),
-    Point(480.0 + 100.0f, 640.0 - 217.0f),
     Point(480.0 / 2.0f, -38.0f),
+    Point(480.0 + 100.0f, 640.0 - 217.0f),
 };
 
 CItemSprite::CItemSprite() :
-    aniTimer(0.0f)
+    aniTimer(0.0f),
+    currentPosIndex(0)
 {
 }
 
@@ -26,12 +27,28 @@ CItemSprite::~CItemSprite()
 {
 }
 
+void CItemSprite::setOpacity(GLubyte opacity)
+{
+    Sprite::setOpacity(opacity);
+    text->setOpacity(opacity);
+}
+
+void CItemSprite::setColor(const Color3B& color)
+{
+    Sprite::setColor(color);
+    text->setColor(color);
+}
+
 void CItemSprite::setCurrentPosition(int idx)
 {
     if(idx >= 0 && idx < 9)
     {
+        currentPosIndex = idx;
         currentPos = CItemSprite::coor[idx];
         this->setPosition(currentPos);
+
+        // 透明度
+        this->setOpacity((idx / 5.0) * 255);
     }
 }
 
@@ -60,10 +77,6 @@ bool CItemSprite::init()
         return false;
     }
 
-    // 位置呢
-    setCurrentPosition(0);
-    setNextPosition(1);
-
     a = rand() % 10;
     b = rand() % 10;
     sum = a + b;
@@ -71,7 +84,7 @@ bool CItemSprite::init()
     // 字
     char temp[10];
     sprintf(temp, "%d + %d =", a, b);
-    LabelTTF* text = LabelTTF::create(temp, "Optima", 24);
+    text = LabelTTF::create(temp, "Optima", 24);
 
     // 排版
     Rect size = this->getTextureRect();
@@ -82,7 +95,10 @@ bool CItemSprite::init()
     text->setPositionY(size.getMaxY() / 2.0f);
 
     this->setColor(Color3B(0, 0, 0));
-    text->setColor(Color3B(0, 0, 0));
+
+    // 位置呢
+    setCurrentPosition(0);
+    setNextPosition(1);
 
     return true;
 }
@@ -91,5 +107,5 @@ TouchAction CItemSprite::rightAction()
 {
     if(sum < 10) return TOA_LEFT;
     if(sum == 10) return TOA_DOWN;
-    return TOA_DOWN;
+    return TOA_RIGHT;
 }

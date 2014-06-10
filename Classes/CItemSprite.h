@@ -3,7 +3,7 @@
 #pragma once
 #include "cocos2d.h"
 
-#define MAX_DROP_TIMER              (0.2f)
+#define MAX_DROP_TIMER              (0.15f)
 
 enum TouchAction
 {
@@ -35,13 +35,19 @@ public:
 
     void                            updatePositionAndTransparent(float totalDeltaTime);
 
+    virtual void                    setOpacity(GLubyte opacity);
+    virtual void                    setColor(const cocos2d::Color3B& color);
+
 private:
     int                             a;
     int                             b;
     int                             sum;
 
+    int                             currentPosIndex;
     cocos2d::Point                  currentPos;
     cocos2d::Point                  nextPos;
+
+    cocos2d::LabelTTF*              text;
 
     // 当下动画时间
     float                           aniTimer;

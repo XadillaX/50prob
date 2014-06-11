@@ -62,8 +62,9 @@ bool CItemLayer::init()
     winLabel->setColor(Color3B(0, 0, 0));
 
     // best score
-    ValueMap vm = FileUtils::getInstance()->getValueMapFromFile("fastest");
-    bestTime = vm["!"].asFloat();
+    bestTime = CCUserDefault::sharedUserDefault()->getFloatForKey("fastest");
+    //ValueMap vm = FileUtils::getInstance()->getValueMapFromFile("fastest");
+    //bestTime = vm["!"].asFloat();
     if(0.0 == bestTime)
     {
         bestTime = 999999;
@@ -313,9 +314,11 @@ void CItemLayer::endGame()
         sprintf(best, "Best time to all right: %.2f s", bestTime);
         bestTimeLabel->setString(best);
 
-        ValueMap vm;
-        vm["!"] = bestTime;
-        FileUtils::getInstance()->writeToFile(vm, "fastest");
+        //ValueMap vm;
+        //vm["!"] = bestTime;
+        //FileUtils::getInstance()->writeToFile(vm, "fastest");
+
+        CCUserDefault::sharedUserDefault()->setFloatForKey("fastest", bestTime);
 
         winLabel->setColor(Color3B(255, 0, 0));
     }
